@@ -31,4 +31,4 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: Standalone/bin/*/*.dll
+          files: Standalone/bin/*/*/*.dll
