@@ -27,6 +27,7 @@ jobs:
         run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=OSX-Linux /p:Platform=x64 /p:AppendTargetFrameworkToOutputPath=false
       - name: Build Linux 32-bit
         run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=OSX-Linux /p:Platform=x86 /p:AppendTargetFrameworkToOutputPath=false
+      - run: ls Standalone/
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
