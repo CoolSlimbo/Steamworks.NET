@@ -20,15 +20,26 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore Standalone/Steamworks.NET.Standard.sln
       - name: Build Windows 64-bit
-        run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=Windows /p:Platform=x64 /p:AppendTargetFrameworkToOutputPath=false
+        run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=Windows /p:Platform=x64
       - name: Build Windows 32-bit
-        run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=Windows /p:Platform=x86 /p:AppendTargetFrameworkToOutputPath=false
+        run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=Windows /p:Platform=x86
       - name: Build Linux 64-bit
-        run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=OSX-Linux /p:Platform=x64 /p:AppendTargetFrameworkToOutputPath=false
+        run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=OSX-Linux /p:Platform=x64
       - name: Build Linux 32-bit
-        run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=OSX-Linux /p:Platform=x86 /p:AppendTargetFrameworkToOutputPath=false
-      - run: ls Standalone/bin
+        run: dotnet build Standalone/Steamworks.NET.Standard.sln --no-restore /p:Configuration=OSX-Linux /p:Platform=x86
+      - name: Copy and Zip
+        run: |
+          #!/bin/bash
+          find Standalone/bin/*/*/*.dll -type f | while read file; 
+          do filename=$(basename "$file"); 
+          pathname=$(dirname "$file");
+          pathname=${pathname#Standalone/bin/};
+          pathname="${pathname##*/}/${pathname%%/*}";
+          mkdir -p bundled/$pathname/;
+          cp -r $file bundled/$pathname/$filename;
+          done;
+          zip -r bundled.zip bundled;
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: Standalone/bin/*/*/*.dll
+          files: bundled.zip

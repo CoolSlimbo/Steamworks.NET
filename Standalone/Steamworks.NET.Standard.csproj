@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
 		<RootNamespace>Steamworks</RootNamespace>
-		<AssemblyName>Steamworks.NET_$(Configuration)-$(Platform)</AssemblyName>
+		<AssemblyName>Steamworks.NET</AssemblyName>
 		<Platforms>x64;x86</Platforms>
 		<Configurations>Windows;OSX-Linux</Configurations>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
