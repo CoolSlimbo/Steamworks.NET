@@ -1,0 +1,33 @@
+name: Build Project
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build Windows 64-bit
+        run: dotnet build Standalone\Steamworks.NET.Standard.sln --no-restore /p:Configuration=Windows /p:Platform=x64 /p:AppendTargetFrameworkToOutputPath=false
+      - name: Build Windows 32-bit
+        run: dotnet build Standalone\Steamworks.NET.Standard.sln --no-restore /p:Configuration=Windows /p:Platform=x86 /p:AppendTargetFrameworkToOutputPath=false
+      - name: Build Linux 64-bit
+        run: dotnet build Standalone\Steamworks.NET.Standard.sln --no-restore /p:Configuration=OSX-Linux /p:Platform=x64 /p:AppendTargetFrameworkToOutputPath=false
+      - name: Build Linux 32-bit
+        run: dotnet build Standalone\Steamworks.NET.Standard.sln --no-restore /p:Configuration=OSX-Linux /p:Platform=x86 /p:AppendTargetFrameworkToOutputPath=false
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: Standalone/bin/**.dll
