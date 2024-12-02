@@ -17,7 +17,7 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore Standalone\Steamworks.NET.Standard.sln
       - name: Build Windows 64-bit
         run: dotnet build Standalone\Steamworks.NET.Standard.sln --no-restore /p:Configuration=Windows /p:Platform=x64 /p:AppendTargetFrameworkToOutputPath=false
       - name: Build Windows 32-bit
